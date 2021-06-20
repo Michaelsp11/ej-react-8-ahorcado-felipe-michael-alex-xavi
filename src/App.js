@@ -13,6 +13,7 @@ function App() {
     "https://letras-ahorcado.herokuapp.com/letras/";
   //const [fallos, setFallos] = useState(11);
   const [palabraSecreta, setPalabraSecreta] = useState("");
+  const [listaLetrasUsadas, setListaLetrasUsadas] = useState([]);
   const getPalabra = useCallback(async () => {
     const response = await fetch(urlApiPalabras);
     const { lista } = await response.json();
@@ -29,8 +30,11 @@ function App() {
         <Muñeco />
       </div>
       <Palabra palabraSecreta={palabraSecreta} />
-      <IntroducirTexto />
-      <LetrasEliminadas />
+      <IntroducirTexto
+        listaLetrasUsadas={listaLetrasUsadas}
+        setListaLetrasUsadas={setListaLetrasUsadas}
+      />
+      <LetrasEliminadas listaLetrasUsadas={listaLetrasUsadas} />
       <Mensajes />
     </>
   );

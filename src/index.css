@@ -16,7 +16,7 @@ svg > * {
   stroke-linecap: round;
   stroke-miterlimit: 10;
   transition: 0.25s;
-  /* display: none; */
+  display: none;
 }
 svg > *.on {
   display: inline;
