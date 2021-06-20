@@ -1,9 +1,7 @@
 export const IntroducirTexto = (props) => {
-  const { listaLetrasUsadas, setListaLetrasUsadas, letraIntroducida, setLetraIntroducida, comprobarLetra
-  } = props;
+  const { listaLetrasUsadas, setListaLetrasUsadas, comprobarLetra } = props;
   const enviarLetra = (evento) => {
-    setLetraIntroducida(evento.target.value);
-    comprobarLetra(letraIntroducida);
+    comprobarLetra(evento.target.value);
     setListaLetrasUsadas([
       ...listaLetrasUsadas,
       {
@@ -14,10 +12,6 @@ export const IntroducirTexto = (props) => {
     evento.target.value = "";
   };
   return (
-    <input
-      type="text"
-      className="letra"
-      maxLength="1"
-      onChange={enviarLetra} />
+    <input type="text" className="letra" maxLength="1" onChange={enviarLetra} />
   );
 };
