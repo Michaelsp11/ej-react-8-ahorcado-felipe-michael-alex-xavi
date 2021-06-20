@@ -5,7 +5,6 @@ import { Palabra } from "./componentes/Palabra";
 import { IntroducirTexto } from "./componentes/IntroducirTexto";
 import { useCallback, useEffect, useState } from "react";
 function App() {
-
   const urlApiPalabras = "http://localhost:3001/palabras";
   const urlApiComprobarPalabra =
     "https://letras-ahorcado.herokuapp.com/letras/";
@@ -13,9 +12,8 @@ function App() {
   const maxFallos = 11;
   const [palabraSecreta, setPalabraSecreta] = useState("");
   const [listaLetrasUsadas, setListaLetrasUsadas] = useState([]);
-  const [palabraAdivinar, setPalabraAdivinar] = useState("");
+  const [letrasMostrar, setLetrasMostrar] = useState([]);
 
-  const [letraIntroducida, setLetraIntroducida] = useState("");
   const getPalabra = useCallback(async () => {
     const response = await fetch(urlApiPalabras);
     const { lista } = await response.json();
@@ -27,28 +25,29 @@ function App() {
   };
   useEffect(() => getPalabra(), [getPalabra]);
 
-  const comprobarLetra = async () => {
-    const response = await fetch(`${urlApiComprobarPalabra}/${palabraSecreta}/${letraIntroducida}`);
+  const comprobarLetra = async (letraIntroducida) => {
+    const response = await fetch(
+      `${urlApiComprobarPalabra}${palabraSecreta}/${letraIntroducida}`
+    );
     const resultado = await response.json();
-    setListaLetrasUsadas([...listaLetrasUsadas, letraIntroducida]);
     if (!resultado.error) {
-      acierto(resultado.posiciones, letraIntroducida);
+      acierto(resultado.posiciones);
     } else {
       error(resultado.mensaje, letraIntroducida);
     }
   };
   const error = (mensaje, letra) => {
-    if (fallos !== maxFallos) {
+    if (fallos <= maxFallos) {
       setFallos(fallos + 1);
     }
   };
-  const acierto = (arrayPosiciones, letraIntento) => {
-    setPalabraAdivinar(
-      palabraAdivinar
+  const acierto = (arrayPosiciones) => {
+    setPalabraSecreta(
+      palabraSecreta
         .split("")
         .map((letra, indice) => {
           if (arrayPosiciones.includes(indice)) {
-            return letraIntento;
+            setLetrasMostrar([...letrasMostrar, letra]);
           }
           return letra;
         })
@@ -61,14 +60,13 @@ function App() {
       <div className="ahorcado">
         <Muñeco />
       </div>
-      <Palabra palabraSecreta={palabraSecreta} />
+      <Palabra palabraSecreta={palabraSecreta} letrasMostrar={letrasMostrar} />
       <IntroducirTexto
         listaLetrasUsadas={listaLetrasUsadas}
-        setListaLetrasUsadas={setLetraIntroducida}
-        letraIntroducida={letraIntroducida}
-        setLetraIntroducida={setLetraIntroducida}
-        comprobar={comprobarLetra} />
-      <LetrasEliminadas />
+        setListaLetrasUsadas={setListaLetrasUsadas}
+        comprobarLetra={comprobarLetra}
+      />
+      <LetrasEliminadas listaLetrasUsadas={listaLetrasUsadas} />
       <Mensajes />
     </>
   );
