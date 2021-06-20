@@ -6,5 +6,5 @@ export const LetrasEliminadas = (props) => {
         <li key={letraUsada.id}>{letraUsada.letra}</li>
       ))}
     </ul>
-  );
+  )
 };
