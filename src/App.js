@@ -36,10 +36,18 @@ function App() {
   ];
   const [palabra, setPalabra] = useState("");
   const [adivinarPalabra, setadivinarPalabra] = useState("");
+
+  const [fallo, setFallo] = useState(0);
+  const fallar = () => {
+    setFallo(fallo + 1);
+  };
+
+
+
   const palabraAleatoria = () => {
     const aleatorio = Math.floor(Math.random() * listado.lenght);
     const seleccion = aleatorio;
-    setPalabra(listado(seleccion));
+    setPalabra(listado[seleccion]);
   };
   return (
     <>
