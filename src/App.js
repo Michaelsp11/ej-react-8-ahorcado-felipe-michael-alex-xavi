@@ -3,50 +3,32 @@ import { Mensajes } from "./componentes/Mensajes";
 import { Muñeco } from "./componentes/Muñeco";
 import { Palabra } from "./componentes/Palabra";
 import { IntroducirTexto } from "./componentes/IntroducirTexto";
-import { useState } from "react";
-
-// server y api palabras.
-// serverPalabras: "http://localhost:3000/palabras",
-// apiJuego: "https://letras-ahorcado.herokuapp.com/letras/",
-
+import { useCallback, useEffect, useState } from "react";
 function App() {
-  const listado = [
-    "avispa",
-    "electrodomestico",
-    "teclado",
-    "boligrafo",
-    "azul",
-    "ballena",
-    "cajon",
-    "serpiente",
-    "hombre",
-    "saco",
-    "tormenta",
-    "radio",
-    "mar",
-    "helicoptero",
-    "jamon",
-    "mochila",
-    "telediario",
-    "koala",
-    "simpatico",
-    "cuchillo",
-    "chimenea",
-    "circulo",
-  ];
-  const [palabra, setPalabra] = useState("");
-  const [adivinarPalabra, setadivinarPalabra] = useState("");
-  const palabraAleatoria = () => {
-    const aleatorio = Math.floor(Math.random() * listado.lenght);
-    const seleccion = aleatorio;
-    setPalabra(listado(seleccion));
+  // server y api palabras.
+  // serverPalabras: "http://localhost:3000/palabras",
+  // apiJuego: "https://letras-ahorcado.herokuapp.com/letras/",
+  const urlApiPalabras = "http://localhost:3001/palabras";
+  const urlApiComprobarPalabra =
+    "https://letras-ahorcado.herokuapp.com/letras/";
+  //const [fallos, setFallos] = useState(11);
+  const [palabraSecreta, setPalabraSecreta] = useState("");
+  const getPalabra = useCallback(async () => {
+    const response = await fetch(urlApiPalabras);
+    const { lista } = await response.json();
+    setPalabraSecreta(getPalabraAleatoria(lista));
+  }, []);
+  const getPalabraAleatoria = (palabras) => {
+    const posicionAleatoria = Math.floor(Math.random() * palabras.length);
+    return palabras[posicionAleatoria];
   };
+  useEffect(() => getPalabra(), [getPalabra]);
   return (
     <>
       <div className="ahorcado">
         <Muñeco />
       </div>
-      <Palabra adivinarPalabra={adivinarPalabra} />
+      <Palabra palabraSecreta={palabraSecreta} />
       <IntroducirTexto />
       <LetrasEliminadas />
       <Mensajes />

@@ -1,11 +1,10 @@
 export const Palabra = (props) => {
-  const { adivinarPalabra } = props;
-
+  const { palabraSecreta } = props;
   return (
     <>
       <ul className="palabra">
-        {[...adivinarPalabra].map((letra, indice) => (
-          <li key={indice}>{letra.toUpperCase()}</li>
+        {palabraSecreta.split("").map((letra, indice) => (
+          <li key={indice}></li>
         ))}
       </ul>
     </>
