@@ -33,10 +33,10 @@ function App() {
     if (!resultado.error) {
       acierto(resultado.posiciones);
     } else {
-      error(resultado.mensaje, letraIntroducida);
+      error();
     }
   };
-  const error = (mensaje, letra) => {
+  const error = () => {
     if (fallos <= maxFallos) {
       setFallos(fallos + 1);
     }
@@ -58,7 +58,7 @@ function App() {
   return (
     <>
       <div className="ahorcado">
-        <Muñeco />
+        <Muñeco fallos={fallos} />
       </div>
       <Palabra palabraSecreta={palabraSecreta} letrasMostrar={letrasMostrar} />
       <IntroducirTexto
